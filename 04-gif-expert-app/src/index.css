@@ -1,0 +1,40 @@
+* {
+	font-family: Helvetica, Arial, Helvetica, sans-serif;
+}
+
+body {
+	background-color: black;
+	color: pink;
+	padding: 60px;
+}
+
+input {
+	width: 100%;
+	font-size: 1.3rem;
+	margin: 20px 0;
+}
+
+.card-grid {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	gap: 20px;
+}
+
+.card {
+	align-content: center;
+	border: 1px solid orange;
+	border-radius: 6px;
+	overflow: hidden;
+	width: 200px;
+}
+
+.card p {
+	padding: 5px;
+	text-align: center;
+}
+
+.card img {
+	width: 100%;
+}

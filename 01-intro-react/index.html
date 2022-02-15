@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- Import React -->
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <title>ReactApp</title>
+</head>
+<body>
+    
+    <div id="root"></div>
+
+<!-- tengo que agregar un atributo para que babel lo lea -->
+    <script type="text/babel">
+        const nombre = 'Goku'
+        const h1Tag = <h1>Hola son {nombre.toUpperCase() } </h1>
+
+        const divRoot = document.querySelector('#root')
+
+        ReactDOM.render(h1Tag, divRoot)
+
+        
+    </script>
+</body>
+</html>
