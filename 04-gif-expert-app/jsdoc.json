@@ -1,0 +1,32 @@
+{
+    "plugins": ["plugins/markdown", "better-docs/component"],
+    "source": {
+      "include": ["./src"],
+      "includePattern": ".+\\.js(doc|x)?$",
+      "excludePattern": "(node_modules | docs)"
+    },
+    "tags": {
+      "allowUnknownTags": true
+    },
+    "templates": {
+      "cleverLinks": false,
+      "monospaceLinks": false,
+      "tabNames": {
+        "api": "APP",
+        "tutorials": "Tutoriales"
+      }
+    },
+    "opts": {
+      "recurse": true,
+      "destination": "./docs",
+      "template": "node_modules/docdash",
+      "tutorials": "src/tutorials",
+      "readme": "./README.md"
+    },
+    "docdash": {
+      "search": true,
+      "commonNav": true,
+      "typedefs": true
+    }
+  }
+  

@@ -1,4 +1,4 @@
-import { FormWithCustomHook } from "./components/02-useEffect/FormWithCustomHook"
+import { MultipleCustomHooks } from "./components/03-examples/MultipleCustomHooks"
 import './HookApp.css'
 
 const HookApp = () => {
@@ -6,7 +6,8 @@ const HookApp = () => {
     <div className="container">
         {/* <CounterApp/> */}
         {/* <CounterWithCustomHook/> */}
-        <FormWithCustomHook/>
+        {/* <FormWithCustomHook/> */}
+        <MultipleCustomHooks/>
     </div>
   )
 }

@@ -1,24 +1,28 @@
-import {  useState } from "react";
+import { useEffect } from "react";
+import { useForm } from "../../hooks/useForm";
 import "./effects.css";
+
 export const FormWithCustomHook = () => {
-  const [formState, setFormState] = useState({
+  // usamos el useForm
+  const [formValues, handleInputChange] = useForm({
     name: "",
     email: "",
-    password: ""
+    password: "",
   });
 
-  const { name, email, password } = formState;
+  const { name, email, password } = formValues;
 
-  const handleInputChange = ({target})=> {
-      setFormState({
-          ...formState,
-          [target.name] :target.value
+  useEffect(() => {
+    console.log("email cambio");
+  }, [email]);
 
-      })
-  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.table('formValues', formValues)
+  };
 
   return (
-    <>
+    <form onSubmit={handleSubmit}>
       <h1>FormWithCustomHook</h1>
       <hr />
 
@@ -34,7 +38,7 @@ export const FormWithCustomHook = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div className="form-group mt-3">
         <input
           type="text"
           name="email"
@@ -46,7 +50,7 @@ export const FormWithCustomHook = () => {
         />
       </div>
 
-      <div className="form-group">
+      <div className="form-group mt-3 ">
         <input
           type="password"
           name="password"
@@ -58,7 +62,7 @@ export const FormWithCustomHook = () => {
         />
       </div>
 
-
-    </>
+      <button className="btn btn-secondary">Guardar</button>
+    </form>
   );
 };

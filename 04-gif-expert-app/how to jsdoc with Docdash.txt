@@ -1,0 +1,239 @@
++ documentacion
+    https://jsdoc.app/
+
+     DOCDASH
+    / https://github.com/clenemt/docdash
+
+    BETTER-DOCS
+    https://github.com/SoftwareBrothers/better-docs
+
+    info sobre tags
+    https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html
+
++ Comandos utiles
+    Ayuda
+    $ npx jsdoc -h
+
+........ JSDOC ............
+
+1) Instalar
+    $ npm i jsdoc docdash better-docs
+
+2) creo un archivo
+    * jsdoc.json
+    con este contenido
+
+    {
+        "plugins": ["plugins/markdown", "better-docs/component"],
+        "source": {
+        "include": ["./src"],
+        "includePattern": ".+\\.js(doc|x)?$",
+        "excludePattern": "(node_modules | docs)"
+        },
+        "tags": {
+        "allowUnknownTags": true
+        },
+        "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false,
+        "tabNames": {
+            "api": "APP",
+            "tutorials": "Tutoriales"
+        }
+        },
+        "opts": {
+        "recurse": true,
+        "destination": "./docs",
+        "template": "node_modules/docdash",
+        "tutorials": "src/tutorials",
+        "readme": "./README.md"
+        },
+        "docdash": {
+        "search": true,
+        "commonNav": true,
+        "typedefs": true
+        }
+    }
+
+3) agregar este script al package
+    * "docs": "jsdoc -c jsdoc.json "
+
+4) crear el archivo
+    * jsconfig.json
+    y completarlo con :
+
+    {
+        "compilerOptions": {
+          "checkJs": true,
+          "jsx": "react-jsx"
+        },
+        "exclude": ["node_modules", "**/node_modules/*"]
+    }
+
+    esto hace que nos tire errores relacionados a los tags que pongamos en el jsdoc
+
+5) Podemos agregar una carpeta con TUTORIALES, en HTML o MD.
+    Se va a incluir automaticamente en la web
+
+    5.1) Creamos en src la carpeta:
+        * tutorials
+
+        Le agrego en esta direccion los tutoriales que tenga
+
+    5.2) En jsdoc.json, en opts{}, ya agregue :
+       * "tutorials": "./tutorials"
+
+         @tutorial
+
+    Va a generar un grupo aparte
+    Si creamos una carpeta de tutoriales en la config
+
+      opts: {
+        tutorials:'./tutorials'
+      }
+
+    Podemos poner archivos HTML o .md.
+    Luego desde algun modulo o componente podemos linkear a ese archivo
+
+      /**
+      * modulo Pepito - Ver {@tutorial pepito-tutorial}
+      * @module
+      */
+
+    Esto nos va a generar un link al archivo en la carpeta tutoriales
+
+    Puedo cambiarle el nombre generando un archivo:
+        * tutorials.json
+
+    {
+        "tutorial1": {
+            "title": "Tutorial One"
+        },
+        "tutorial2": {
+            "title": "Tutorial Two"
+        }
+    }
+
+
+6) PLUGINS
+    Para el manejo de apis, por ejemplo, hay plugins:
+    APIS
+    6.1) Instalar:
+        $ npm install jsdoc-http-plugin
+
+    6.2) Agregar el plugin en jsdoc:
+        * "jsdoc-http-plugin"
+
+
+ ..... EJEMPLO .....
+
+    /**
+    * Este componente es un item individual. Recibe la categoria y crea la card
+    * @component
+    * @see GifGridItem
+    * @see Documented
+    * @param {Object} props
+    * @param {string} props.category categoria bla bla
+    * @param {number} [props.index] index oidfa
+    * @param {string} props.key key para el map 
+    * @example
+    * 	<GifGrid category="dragon ball" index={3} />
+    */
+    export const GifGrid = ({ category, key, index }) => {
+        /**\
+        * @const loading un estado
+        */
+        const { loading, data: images } = useFetchGifs( category);
+
+        return (
+            <>
+                <h3 className='animate__animated animate__fadeIn'>{category}</h3>
+
+                {loading && <p className='animate__animated animate__flash'>El componente esta cargando</p> }
+                <div className='card-grid'>
+                    {images.map((img) => {
+                        return <GifGridItem key={key} {...img} />;
+                    })}
+                </div>
+            </>
+        );
+    };
+
+ ...... TAGS .......
+
+    @component
+        Marca que es un componente. Luego muestra info detallada de los metodos que contiene.
+        Hace lo mismo que el @class
+
+        Ejemplo de documentacion de un componente con props.
+        Este no muestra la tabla con las props en la documentacion
+        /**
+        * @component
+        * @param {{cantidad: number, nada: function}} props
+        */
+
+        O asi, que si muestra las props detalladas
+            /**
+        * @component
+        * @param {Object} props 
+        * @param {Number} props.cantidad cantidad de veces que se imprime la frase
+        * @param {Function} props.nada funcion que no hace NADA
+        * @param {String[]} props.cellphones pide un array de numeros de celular
+        */
+
+        Asi se lo llama en otro componente:
+        * <Seba cantidad={4} nada={nada}/>,
+
+
+  @callback
+    Investigar la pagina de callbacks
+    https://jsdoc.app/tags-callback.html
+
+
+  @module
+    Para el back, para taguear los modulos. Los agrupa juntos
+    Los metodos creados dentro de un module, se listaran dentro del mismo
+
+  @type
+    {Array<Number>} // [1,2,3,4]
+    {{name: string|number, id: number}} // {name: 'pepito'|15, id: 1337}
+
+  @typedef
+    Primero creamos el tipo de objeto
+      /**
+        * 
+        * @typedef {Object} usuario
+        * @property {Number} id El id del us 
+        * @property {String|Number} [name] El nombre del tipo (opcional)  
+        * @
+      */
+
+    Asi estableces los campos y los tipos del objeto para cuando crees otro similar
+
+    Luego cuando creas el objeto, le marcas el tipo
+
+      /**
+        * 
+        *  @type {usuario}   
+      */
+      const pepito = {
+        id:  1337,
+        name: 'pepito'
+      }
+
+  @link
+    Podemos linkear entre componentes
+
+    /**
+      * 
+      *  hay una funcion parecida en el contexto {@link OtroComponente}   
+      */
+
+  @see
+    Similar a @link. Podemos mencionar directamente un componente y nos linkea directo
+    Mas facil de usar parece
+
+     /**
+      * 
+      *  @see OtroComponente
+      */ 
