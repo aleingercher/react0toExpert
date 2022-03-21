@@ -1,24 +1,34 @@
+import useCounter from "../../hooks/useCounter";
 import { useFetch } from "../../hooks/useFetch";
-import "../02-useEffect/effects.css";
 
 export const MultipleCustomHooks = () => {
-  const url = `https://www.breakingbadapi.com/api/quotes/1`;
+  const { counter, increment } = useCounter(1);
 
-  const state = useFetch(url);
+  const url = `https://www.breakingbadapi.com/api/quotes/${counter}`;
 
-  console.log("state", state);
+  const { data, loading } = useFetch(url);
 
+  const { author, quote } = !!data && data[0];
+
+  console.log("author", author);
+  console.log("quote", quote);
   return (
     <div>
       <h1>Breaking bad quotes</h1>
       <hr />
 
-      <div className="alert alert-info text-center">Loading...</div>
+      {loading ? (
+        <div className="alert alert-info text-center">Loading...</div>
+      ) : (
+        <blockquote className="blockquote " style={{ textAlign: "right" }}>
+          <p>{quote}</p>
+          <footer className="blockquote-footer"> {author}</footer>
+        </blockquote>
+      )}
 
-      <blockquote className="blockquote text-right">
-        <p>Hola Mundo</p>
-        <footer className="blockquote-footer">Alejandro</footer>
-      </blockquote>
+      <button onClick={increment} className="btn btn-outline-warning">
+        proxima cita
+      </button>
     </div>
   );
 };

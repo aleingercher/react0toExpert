@@ -1,23 +1,32 @@
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react";
 
-export const useFetch = ( url ) => {
-    
-    const [state, setState] = useState({data: null, loading: true, error: null})
+export const useFetch = (url) => {
+  const initialData = { data: null, loading: true, error: null };
 
-    useEffect(() => {
-      
-        fetch( url )
-            .then( resp => resp.json())
-            .then( data => {
+  const isMounted = useRef(true);
 
-                setState({
-                    data, 
-                    loading: true, 
-                    error: null
-                })
-            })
+  const [state, setState] = useState(initialData);
 
-    }, [url])
-    
-    return state
-}
+  useEffect(() => {
+    return () => (isMounted.current = false);
+  }, []);
+
+  useEffect(() => {
+    setState(initialData);
+
+    fetch(url)
+      .then((resp) => resp.json())
+      .then((data) => {
+        // esto es para evitar setear un estado cuando esta desmontado el componente
+        if (isMounted.current) {
+          setState({
+            data,
+            loading: false,
+            error: null,
+          });
+        }
+      });
+  }, [url]);
+
+  return state;
+};
